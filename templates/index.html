@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+    <link href="{{ url_for('static', path='/style.css') }}" rel="stylesheet">
+</head>
+
+<body>
+    <h1>Competitions</h1>
+    {% for link in competition_links %}
+    <a href="{{ link.href }}"><button>{{ link.name }}</button></a><br>
+    {% endfor %}
+</body>
+
+</html>
