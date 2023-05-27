@@ -38,3 +38,8 @@ app.include_router(leaderboard_router, prefix="/{compe}")
 app.include_router(mysub_router, prefix="/{compe}")
 app.include_router(submit_router, prefix="/{compe}")
 app.include_router(submit_result_router, prefix="/{compe}")
+
+if __name__ == "__main__":
+    import uvicorn
+
+    uvicorn.run(app, host="127.0.0.1", port=8080, reload=False)
