@@ -24,5 +24,10 @@ async def leaderboard_page(request: Request, compe: str):
     db = load_db(compe, sc.main_score, sc.disp_score, sc.ascending)
 
     return templates.TemplateResponse(
-        "leaderboard.html", {"request": request, "tables": db, "compe": compe}
+        "leaderboard.html",
+        {
+            "request": request,
+            "tables": db,
+            "macro_src": "./" + compe + "/macro.html",
+        },
     )

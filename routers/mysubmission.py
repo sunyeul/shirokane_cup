@@ -28,5 +28,6 @@ async def mysub_page(request: Request, compe: str):
     db = load_db(compe, sc.main_score, sc.disp_score, sc.ascending)
 
     return templates.TemplateResponse(
-        "mysubmission.html", {"request": request, "tables": db, "compe": compe}
+        "mysubmission.html",
+        {"request": request, "tables": db, "macro_src": "./" + compe + "/macro.html"},
     )

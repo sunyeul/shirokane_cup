@@ -3,13 +3,13 @@
 
 <head>
     <link href="{{ url_for('static', path='/style.css') }}" rel="stylesheet">
-    <title>ニュース配信のクリック率予測</title>
+    <title>{{ competition_title }} ~ {{ competition_subtitle }}</title>
 </head>
 
 <body>
     <header class="header">
         <div class="header-content">
-            2019新卒研修
+            {{ competition_title }}
             {% if 'access_token' in request.cookies %}
             <a href="/logout" class="logout-button">Logout</a>
             {% else %}
@@ -20,8 +20,8 @@
 
     <header class="banner">
         <section id="compe_info">
-            <h1>分析演習</h1>
-            <p id="compe_description">ニュース配信のクリック率予測</p>
+            <h1>{{ competition_title }}</h1>
+            <p id="compe_description">{{ competition_subtitle }}</p>
 
         </section>
 

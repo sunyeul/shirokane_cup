@@ -18,5 +18,5 @@ async def submit_page(request: Request, compe: str):
         return RedirectResponse(url="/login", status_code=302)
 
     return templates.TemplateResponse(
-        "submit.html", {"request": request, "compe": compe}
+        "submit.html", {"request": request, "macro_src": "./" + compe + "/macro.html"}
     )
