@@ -7,4 +7,4 @@ CREATE TABLE user(
 );
 
 .mode csv
-.import data/user.csv user
+.import db/user.csv user
