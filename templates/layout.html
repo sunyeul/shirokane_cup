@@ -3,12 +3,19 @@
 
 <head>
     <link href="{{ url_for('static', path='/style.css') }}" rel="stylesheet">
-    <title>Exercise Leaderboard beta</title>
+    <title>ニュース配信のクリック率予測</title>
 </head>
 
 <body>
     <header class="header">
-        2019新卒研修
+        <div class="header-content">
+            2019新卒研修
+            {% if 'access_token' in request.cookies %}
+            <a href="/logout" class="logout-button">Logout</a>
+            {% else %}
+            <a href="/login" class="login-button">Login</a>
+            {% endif %}
+        </div>
     </header>
 
     <header class="banner">
