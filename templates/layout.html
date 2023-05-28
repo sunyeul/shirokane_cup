@@ -11,19 +11,28 @@
         2019新卒研修
     </header>
 
-    <main class="main">
+    <header class="banner">
         <section id="compe_info">
             <h1>分析演習</h1>
             <p id="compe_description">ニュース配信のクリック率予測</p>
+
         </section>
 
         <nav id="compe_bar">
-            <a href="overview">Overview</a>
-            <a href="data">Data</a>
-            <a href="leaderboard">Leaderboard</a>
-            <a href="mysubmission">My Submissions</a>
-            <a href="submit" class="highlight">Submit Predictions</a>
+            <div class="left">
+                <a href="overview">Overview</a>
+                <a href="data">Data</a>
+                <a href="leaderboard">Leaderboard</a>
+            </div>
+            <div class="right">
+                <a href="mysubmission">My Submissions</a>
+                <a href="submit" class="highlight">Submit Predictions</a>
+            </div>
         </nav>
+
+    </header>
+
+    <main class="main">
 
         {% block body %}{% endblock %}
     </main>
