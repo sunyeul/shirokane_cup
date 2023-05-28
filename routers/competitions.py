@@ -1,9 +1,7 @@
-from fastapi import APIRouter, Request, Depends
+from fastapi import APIRouter, Request
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse
 from jinja2 import FileSystemLoader
-
-from auth import get_current_active_user, UserInDB
 
 import os
 
@@ -15,7 +13,6 @@ templates.env.loader = FileSystemLoader(["./templates", "./competitions"])
 @router.get(
     "/competitions",
     response_class=HTMLResponse,
-    dependencies=[Depends(get_current_active_user)],
 )
 async def top_page(request: Request):
     competition_links = [
