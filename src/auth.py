@@ -10,23 +10,7 @@ from jose import JWTError, jwt
 from passlib.context import CryptContext
 from pydantic import BaseModel
 
-
-# JWT 시크릿 키와 액세스 토큰 만료 기간
-SECRET_KEY = "my_secret_key"
-ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
-
-
-# 유저를 관리하기 위한 딕셔너리. 실제로는 데이터베이스로 관리되어야 함.
-fake_users_db = {
-    "johndoe": {
-        "username": "johndoe",
-        "full_name": "John Doe",
-        "email": "johndoe@example.com",
-        "hashed_password": "$2b$12$4Xp/DHq.kkp0lSlkj9UjV.lg8oxw.ooOl9KAS5mxRbQHE6bkVeBmS",
-        "disabled": False,
-    }
-}
+from database import user_table, user_database
 
 
 class Token(BaseModel):
@@ -39,15 +23,17 @@ class TokenData(BaseModel):
 
 
 class User(BaseModel):
-    username: str
-    email: str | None = None
-    full_name: str | None = None
-    disabled: bool | None = None
+    user_id: int
+    username: str | None = None
 
 
 class UserInDB(User):
     hashed_password: str
 
+
+SECRET_KEY = "my_secret_key"
+ALGORITHM = "HS256"
+ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
@@ -65,14 +51,15 @@ def get_password_hash(password):
     return pwd_context.hash(password)
 
 
-def get_user(db, username: str):
-    if username in db:
-        user_dict = db[username]
-        return UserInDB(**user_dict)
+async def get_user(username: str):
+    query = user_table.select().where(user_table.c.username == username)
+    result = await user_database.fetch_one(query)
+    if result is not None:
+        return UserInDB(**result)
 
 
-def authenticate_user(fake_db, username: str, password: str):
-    user = get_user(fake_db, username)
+async def authenticate_user(username: str, password: str):
+    user = await get_user(username)
     if not user:
         return False
     if not verify_password(password, user.hashed_password):
@@ -112,15 +99,7 @@ async def get_current_user(request: Request):
     except JWTError:
         raise credentials_exception
 
-    user = get_user(fake_users_db, username=token_data.username)
+    user = get_user(username=token_data.username)
     if user is None:
         raise credentials_exception
     return user
-
-
-async def get_current_active_user(
-    current_user: Annotated[User, Depends(get_current_user)]
-):
-    if current_user.disabled:
-        raise HTTPException(status_code=400, detail="Inactive user")
-    return current_user

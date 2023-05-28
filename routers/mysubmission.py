@@ -5,7 +5,7 @@ from jinja2 import FileSystemLoader
 from load_db import load_db
 
 import importlib
-from auth import get_current_user, get_current_active_user
+from auth import get_current_user
 
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")
