@@ -1,7 +1,17 @@
 {% extends "layout.html" %}
 {% from macro_src import competition_title, competition_subtitle %}
+{% from macro_src import resultview %}
 
 {% block body %}
+
+{% if main_score %}
+<div class="main" id="subresult">
+    <div class="result_success" style="width: 100%; margin: 0 auto;">
+        サブミット成功<br>
+        {{ resultview(main_score) }}
+    </div>
+</div>
+{% endif %}
 
 <div class="main" id="table">
     <div class="textarea">
@@ -16,12 +26,11 @@
         </tr>
         {% for score in tables.iterrows() %}
         <tr>
-            <td align="left">{{ score[1].title }}</td>
-            <td align="left">{{ score[1].user_id }}</td>
-            <td align="left" style="background-color: #FFE0C4;">{{score[1][2]}}</td>
-            {% for s in score[1][3:] %}
-            <td align="left">{{s}}</td>
-            {% endfor %}
+            <td>{{score[0]+1}}</td>
+            <td>{{score[1]["Username"]}}</td>
+            <td style="background-color: #FFE0C4;">{{score[1]["Best Score"]}}</td>
+            <td>{{score[1]["#Submission"]}}</td>
+            <td>{{score[1]["Last Submission"]}}</td>
         </tr>
         {% endfor %}
     </table>
