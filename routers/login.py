@@ -1,7 +1,7 @@
 from datetime import timedelta
 from typing import Annotated
 
-from fastapi import APIRouter, Request, HTTPException, Depends, status, Response
+from fastapi import APIRouter, Request, Depends, status
 from fastapi.security import OAuth2PasswordRequestForm
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse, RedirectResponse
@@ -21,14 +21,14 @@ def login(request: Request):
 
 @router.post("/token", response_class=HTMLResponse)
 async def login_for_access_token(
-    form_data: Annotated[OAuth2PasswordRequestForm, Depends()]
+    request: Request, form_data: Annotated[OAuth2PasswordRequestForm, Depends()]
 ):
     user = await authenticate_user(form_data.username, form_data.password)
     if not user:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Incorrect username or password",
-            headers={"WWW-Authenticate": "Bearer"},
+        msg = "Incorrect username or password"
+        return templates.TemplateResponse(
+            "login.html",
+            {"request": request, "msg": msg},
         )
 
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
