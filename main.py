@@ -12,7 +12,6 @@ from routers import (
     leaderboard_router,
     mysub_router,
     submit_router,
-    submit_result_router,
 )
 
 app = FastAPI()
@@ -34,7 +33,6 @@ app.include_router(data_router, prefix="/competitions/{compe}")
 app.include_router(leaderboard_router, prefix="/competitions/{compe}")
 app.include_router(mysub_router, prefix="/competitions/{compe}")
 app.include_router(submit_router, prefix="/competitions/{compe}")
-app.include_router(submit_result_router, prefix="/competitions/{compe}")
 
 if __name__ == "__main__":
     import uvicorn

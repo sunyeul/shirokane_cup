@@ -5,4 +5,3 @@ from .data import router as data_router
 from .leaderboard import router as leaderboard_router
 from .mysubmission import router as mysub_router
 from .submit import router as submit_router
-from .submitresult import router as submit_result_router
