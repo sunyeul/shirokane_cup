@@ -45,6 +45,11 @@
 <body>
     <main>
         <h2>Login</h2>
+        {% if msg %}
+        <div class="alert alert-danger" role="alert">
+            {{msg}}
+        </div>
+        {% endif %}
         <form action="/token" method="post">
             <div class="input-group">
                 <label for="username">Username</label>

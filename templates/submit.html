@@ -9,20 +9,23 @@
     <div class="textarea">
         <h2>Submit Predictions</h2>
         <hr>
-        <p>ここで記入した提出タイトルと提出者名前がリーダーボードに反映されます。</p>
-        <p>※提出者の名前ごとに提出回数がカウントされます。研修中はなるべく同じ提出者名を使用してください。</p>
+        <p>ここで提出したファイルのスコアがリーダーボードに反映されます。</p>
+        {% if msg %}
+        <div class="alert alert-danger" role="alert">
+            {{msg}}
+        </div>
+        {% endif %}
         <form id="my_form" method="post" action="submitresult" enctype="multipart/form-data" autocomplete="on">
             <ul>
                 <li class="file">
                     <input type="file" style="display:inline" name="upload_file" />
                 </li>
-                <li class="submit_name">
-                    <label for="submit_name">提出タイトル</label>
-                    <input type="text" style="display:inline" name="submit_name" size="30" />
+                <li class="description">
+                    <label for="description">提出説明:</label>
                 </li>
-                <li class="user_name">
-                    <label for="user_name">提出者名前</label>
-                    <input type="text" style="display:inline" name="user_name" size="30" />
+                <li>
+                    <input type="text" name="description" style="width: 1000px; padding: 10px;" maxlength="100"
+                        placeholder="Write what you want :)" />
                 </li>
                 <li>
                     <button class="send" id="button" type="submit" name="submit">submit!</button>
