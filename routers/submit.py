@@ -82,7 +82,7 @@ async def submitresult(
     # add file contents and upload information into database
     user = await get_current_user(request, db)
     insert_submission(
-        competition_id=int(compe),
+        competition_name=compe,
         user_id=user.id,
         description=description,
         score=score,

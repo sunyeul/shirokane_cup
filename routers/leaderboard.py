@@ -12,7 +12,7 @@ templates.env.loader = FileSystemLoader(["./templates", "./competitions"])
 
 @router.get("/leaderboard", response_class=HTMLResponse)
 async def leaderboard_page(request: Request, compe: str):
-    leaderboard = read_leaderboard(int(compe))
+    leaderboard = read_leaderboard(competition_name=compe)
     return templates.TemplateResponse(
         "leaderboard.html",
         {
