@@ -2,7 +2,8 @@ DROP TABLE IF EXISTS users;
 
 CREATE TABLE users(
     id INTEGER PRIMARY KEY,
-    username TEXT,
+    username TEXT UNIQUE NOT NULL,
+    display_name TEXT,
     hashed_password TEXT
 );
 
@@ -13,8 +14,8 @@ DROP TABLE IF EXISTS competitions;
 
 CREATE TABLE competitions(
     id INTEGER PRIMARY KEY,
+    name TEXT UNIQUE NOT NULL,
     title TEXT,
-    subtitle TEXT,
     description TEXT
 );
 
