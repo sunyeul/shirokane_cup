@@ -8,7 +8,8 @@ class User(Base):
     __tablename__ = "users"
 
     id = Column("id", Integer, primary_key=True)
-    username = Column("username", String)
+    username = Column("username", String, unique=True)
+    display_name = Column("display_name", String)
     hashed_password = Column("hashed_password", String)
 
     def __init__(
@@ -26,8 +27,8 @@ class Competition(Base):
     __tablename__ = "competitions"
 
     id = Column("id", Integer, primary_key=True)
+    name = Column("name", String, unique=True)
     title = Column("title", String)
-    subtitle = Column("subtitle", String)
     description = Column("description", String)
 
 

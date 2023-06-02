@@ -20,9 +20,7 @@ async def mysub_page(request: Request, compe: str, db=Depends(get_db)):
     except:
         return RedirectResponse(url="/login", status_code=302)
 
-    my_submissions = read_my_submissions(
-        competition_id=int(compe), username=user.username
-    )
+    my_submissions = read_my_submissions(competition_name=compe, username=user.username)
 
     return templates.TemplateResponse(
         "mysubmissions.html",

@@ -1,5 +1,5 @@
 from database import engine, get_db
-from models import SubmitStore
+from models import SubmitStore, Competition
 from datetime import datetime
 from utils import format_time_ago
 
@@ -8,34 +8,38 @@ import pandas as pd
 
 # データベース周りの関数たち
 def insert_submission(
-    competition_id: str,
+    competition_name: str,
     user_id: int = None,
     description: str = None,
     score: float = None,
 ):
-    nowtime = datetime.now()
+    # Use get_db to obtain a session
+    db = next(get_db())
 
+    # get competition_id from competition_name
+    competition_id = (
+        db.query(Competition.id).filter(Competition.name == competition_name).scalar()
+    )
+
+    # Create a new SubmitStore object
     c2 = SubmitStore(
         competition_id=competition_id,
         user_id=user_id,
         description=description,
         score=score,
-        upload_date=nowtime,
+        upload_date=datetime.now(),
     )
-    # Use get_db to obtain a session
-    session_gen = get_db()
-    session = next(session_gen)
 
-    session.add(c2)
-    session.commit()
+    db.add(c2)
+    db.commit()
 
 
-def read_leaderboard(competition_id: int) -> pd.DataFrame:
+def read_leaderboard(competition_name: int) -> pd.DataFrame:
     # 特定のコンペの全ての提出データを取得するためのSQLクエリ
     query = f"""
         SELECT
             "rank" AS "Rank",
-            users.username AS "Username", 
+            users.display_name AS "Username", 
             MIN(submissions.score) AS "Best Score",
             COUNT(submissions.id) AS "#Submission", 
             MAX(submissions.upload_date) AS "Last Submission"
@@ -43,8 +47,10 @@ def read_leaderboard(competition_id: int) -> pd.DataFrame:
             submissions 
         INNER JOIN 
             users ON users.id = submissions.user_id
+        INNER JOIN 
+            competitions ON competitions.id = submissions.competition_id
         WHERE
-            submissions.competition_id = {competition_id}
+            competitions.name = "{competition_name}"
         GROUP BY 
             users.username 
         ORDER BY 
@@ -60,19 +66,21 @@ def read_leaderboard(competition_id: int) -> pd.DataFrame:
     return leaderboard
 
 
-def read_my_submissions(competition_id: id, username: str) -> pd.DataFrame:
+def read_my_submissions(competition_name: str, username: str) -> pd.DataFrame:
     query = f"""
     SELECT
-        description AS "Description",
+        submissions.description AS "Description",
         score AS "Score",
         upload_date AS "Upload Date",
         upload_date AS "Last Submission"
     FROM
         submissions
     INNER JOIN 
-            users ON users.id = submissions.user_id
+        users ON users.id = submissions.user_id
+    INNER JOIN 
+        competitions ON competitions.id = submissions.competition_id
     WHERE
-        submissions.competition_id = {competition_id}
+        competitions.name = "{competition_name}"
         AND users.username = "{username}"
     ORDER BY
         upload_date DESC
