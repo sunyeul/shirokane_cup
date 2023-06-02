@@ -57,7 +57,7 @@ async def authenticate_user(
     password: str,
     db: Session = Depends(get_db),
 ):
-    user = await get_user(db, username)
+    user = await get_user(username=username, db=db)
     if not user:
         return False
     if not verify_password(password, user.hashed_password):
