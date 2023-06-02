@@ -1,59 +1,27 @@
+<!-- Filename: competitions.html -->
+
 <!DOCTYPE html>
 <html>
 
 <head>
-    <meta charset="UTF-8">
     <title>Competitions</title>
+
+    <!-- Favicon -->
+    <link rel="icon" href="{{ url_for('static', path='favicon.ico') }}" type="image/x-icon">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <!-- Custom CSS -->
     <link href="{{ url_for('static', path='/style.css') }}" rel="stylesheet">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #F4F4F4;
-            padding: 50px;
-            color: #333;
-        }
-
-        h1 {
-            text-align: center;
-        }
-
-        .competition-links {
-            display: flex;
-            flex-direction: row;
-            flex-wrap: wrap;
-            justify-content: space-around;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .competition-links a {
-            text-decoration: none;
-        }
-
-        button {
-            padding: 50px 100px;
-            font-size: 30px;
-            color: white;
-            background-color: #5CDB95;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        button:hover {
-            background-color: #05386B;
-        }
-    </style>
 </head>
 
-<body>
-    <h1>Competitions</h1>
-    <div class="competition-links">
+<body class="bg-light text-dark p-5">
+    <h1 class="text-center">Competitions</h1>
+    <div class="d-flex flex-row flex-wrap justify-content-around align-items-center mt-5">
         {% for link in competition_links %}
-        <a href="{{ link.href }}">
-            <button>{{ link.title }}</button>
-        </a>
+        <a href="{{ link.href }}" class="btn btn-success btn-lg p-3 m-2 text-white" role="button">{{ link.title }}</a>
         {% endfor %}
     </div>
 </body>

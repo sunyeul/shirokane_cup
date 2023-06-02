@@ -1,52 +1,122 @@
+<!-- Filename: layout.html -->
+
 <!DOCTYPE html>
 <html>
 
 <head>
-    <link href="{{ url_for('static', path='/style.css') }}" rel="stylesheet">
     <title>{{ competition_title }} ~ {{ competition_subtitle }}</title>
+
+    <!-- Favicon -->
+    <link rel="icon" href="{{ url_for('static', path='favicon.ico') }}" type="image/x-icon">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <!-- Custom CSS -->
+    <link href="{{ url_for('static', path='/style.css') }}" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            color: #333;
+        }
+
+        .navbar {
+            background-color: #f8f9fa;
+        }
+
+        .navbar-brand {
+            color: #007bff;
+        }
+
+        .nav-item {
+            color: #333;
+        }
+
+        .nav-item.active {
+            color: #007bff;
+        }
+
+        .submit-button {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .submit-button:hover {
+            background-color: #218838;
+        }
+
+        .submit-button:active {
+            background-color: #1e7e34;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+        }
+
+        .footer {
+            background-color: #f8f9fa;
+        }
+
+        .footer .text-muted {
+            color: #6c757d;
+        }
+    </style>
 </head>
 
 <body>
-    <header class="header">
-        <div class="header-content">
-            {{ competition_title }}
-            {% if 'access_token' in request.cookies %}
-            <a href="/logout" class="logout-button">Logout</a>
-            {% else %}
-            <a href="/login" class="login-button">Login</a>
-            {% endif %}
-        </div>
-    </header>
+    <nav class="navbar navbar-light bg-light">
+        <a class="navbar-brand" href="/competitions"><i class="fa fa-trophy" aria-hidden="true"></i> 白金カップ</a>
+        {% if 'access_token' in request.cookies %}
+        <a class="nav-link" href="/logout"><i class="fa fa-sign-out" aria-hidden="true"></i> Logout</a>
+        {% else %}
+        <a class="nav-link" href="/login"><i class="fa fa-sign-in" aria-hidden="true"></i> Login</a>
+        {% endif %}
+    </nav>
 
-    <header class="banner">
-        <section id="compe_info">
-            <h1>{{ competition_title }}</h1>
-            <p id="compe_description">{{ competition_subtitle }}</p>
+    <main class="container-fluid mb-5" style="max-width: 1500px;">
+        <header class="jumbotron">
+            <h1 class="display-6">{{ competition_title }}</h1>
+            <p class="lead">{{ competition_subtitle }}</p>
 
-        </section>
-
-        <nav id="compe_bar">
-            <div class="left">
-                <a href="overview">Overview</a>
-                <a href="data">Data</a>
-                <a href="leaderboard">Leaderboard</a>
+            <div class="nav nav-tabs" id="nav-tab">
+                <a class="nav-item nav-link" id="overview-tab" href="overview">Overview</a>
+                <a class="nav-item nav-link" id="data-tab" href="data">Data</a>
+                <a class="nav-item nav-link" id="leaderboard-tab" href="leaderboard">Leaderboard</a>
+                <a class="nav-item nav-link" id="discussion-tab" href="discussion">Discussion</a>
+                <a class="nav-item nav-link ml-auto" id="mysubmissions-tab" href="mysubmissions">My Submissions</a>
+                <a class="nav-item nav-link submit-button" id="submit-tab" href="submit"><i class="fa fa-paper-plane"
+                        aria-hidden="true"></i> Submit Predictions</a>
             </div>
-            <div class="right">
-                <a href="mysubmissions">My Submissions</a>
-                <a href="submit" class="highlight">Submit Predictions</a>
-            </div>
-        </nav>
-
-    </header>
-
-    <main class="main">
-
+        </header>
         {% block body %}{% endblock %}
     </main>
 
-    <footer class="footer">
-        BrainPad
+    <footer class="footer mt-auto py-3 bg-light text-center">
+        <span class="text-muted">BrainPad</span>
     </footer>
+
+    <!-- jQuery and Bootstrap Bundle (includes Popper) -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"
+        integrity="sha384-xrjEj/xEL4MDB+dgonNFB2O4U+3/CZ9ZL/qa0bY07aTb3SA/H8XvfGpkFoWvM6Z6"
+        crossorigin="anonymous"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            let path = window.location.pathname;
+            let page = path.split("/").pop();
+            let currentTab = document.getElementById(`${page}-tab`);
+            if (currentTab) {
+                currentTab.classList.add('active');
+            }
+        });
+    </script>
 </body>
 
 </html>

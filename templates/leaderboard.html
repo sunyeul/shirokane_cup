@@ -1,3 +1,5 @@
+<!-- Filename: leaderboard.html -->
+
 {% extends "layout.html" %}
 {% from macro_src import competition_title, competition_subtitle %}
 {% from macro_src import resultview %}
@@ -6,34 +8,39 @@
 
 {% if main_score %}
 <div class="main" id="subresult">
-    <div class="result_success" style="width: 100%; margin: 0 auto;">
+    <div class="alert alert-success text-center" role="alert">
         サブミット成功<br>
         {{ resultview(main_score) }}
     </div>
 </div>
 {% endif %}
 
-<div class="main" id="table">
-    <div class="textarea">
-        <h2>Leaderboard</h2>
-        <hr>
-    </div>
-    <table>
+<div class="d-flex justify-content-between align-items-center">
+    <h4 class="display-5">Leaderboard</h4>
+</div>
+<hr class="my-3">
+
+<table class="table table-striped">
+    <thead>
         <tr>
-            {% for ind in tables.columns %}
-            <th align="left">{{ind}}</th>
-            {% endfor %}
+            <th scope="col" style="width: 20px;">Rank</th>
+            <th scope="col">Username</th>
+            <th scope="col" style="width: 150px;">Best Score</th>
+            <th scope="col" style="width: 100px;">#Submission</th>
+            <th scope="col" style="width: 200px;">Last Submission</th>
         </tr>
+    </thead>
+    <tbody>
         {% for score in tables.iterrows() %}
         <tr>
-            <td>{{score[0]+1}}</td>
+            <td align="center">{{score[0]+1}}</td>
             <td>{{score[1]["Username"]}}</td>
-            <td style="background-color: #FFE0C4;">{{score[1]["Best Score"]}}</td>
-            <td>{{score[1]["#Submission"]}}</td>
-            <td>{{score[1]["Last Submission"]}}</td>
+            <td align="center" style="background-color: #FFE0C4;">{{score[1]["Best Score"]}}</td>
+            <td align="center">{{score[1]["#Submission"]}}</td>
+            <td align="center">{{score[1]["Last Submission"]}}</td>
         </tr>
         {% endfor %}
-    </table>
-</div>
+    </tbody>
+</table>
 
 {% endblock %}

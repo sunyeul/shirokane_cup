@@ -1,28 +1,29 @@
+<!-- Filename: mysubmissions.html -->
+
 {% extends "layout.html" %}
 {% from macro_src import competition_title, competition_subtitle %}
 
 {% block body %}
 
-<div class="main" id="table">
-    <div class="textarea">
-        <h2>My Submissions</h2>
-        <hr>
-    </div>
-    <table>
-        <tr>
-            {% for ind in tables.columns %}
-            <th align="left">{{ind}}</th>
-            {% endfor %}
-        </tr>
-        {% for score in tables.iterrows() %}
-        <tr>
-            <td>{{score[1]["Description"]}}</td>
-            <td>{{score[1]["Score"]}}</td>
-            <td>{{score[1]["Upload Date"]}}</td>
-            <td>{{score[1]["Last Submission"]}}</td>
-        </tr>
-        {% endfor %}
-    </table>
+<div class="d-flex justify-content-between align-items-center">
+    <h4 class="display-5">My Submissions</h4>
 </div>
+<hr class="my-3">
+
+<table class="table table-striped">
+    <tr>
+        {% for ind in tables.columns %}
+        <th align="left">{{ind}}</th>
+        {% endfor %}
+    </tr>
+    {% for score in tables.iterrows() %}
+    <tr>
+        <td>{{score[1]["Description"]}}</td>
+        <td>{{score[1]["Score"]}}</td>
+        <td>{{score[1]["Upload Date"]}}</td>
+        <td>{{score[1]["Last Submission"]}}</td>
+    </tr>
+    {% endfor %}
+</table>
 
 {% endblock %}

@@ -1,25 +1,18 @@
+<!-- Filename: data.html -->
+
 {% extends "layout.html" %}
 {% from macro_src import competition_title, competition_subtitle %}
 {% from macro_src import data_info %}
 
 {% block body %}
 
-<div class="main">
-    <div class="textarea">
-        <h2>Data Description</h2>
-        <hr>
-        <div id="overviewtext" style="padding-left:40px;">
-            <h3>データの入手方法</h3>
+<div class="d-flex justify-content-between align-items-center">
+    <h4 class="display-5">Data</h4>
+</div>
+<hr class="my-3">
 
-            <br>
-            <form action="data_download" method="get">
-                <button class="send">Download zip</button>
-            </form>
-            </br>
-
-            {{ data_info() }}
-        </div>
-    </div>
+<div id="overviewtext" class="px-1">
+    {{ data_info() }}
 </div>
 
 {% endblock %}
