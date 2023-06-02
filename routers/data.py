@@ -13,7 +13,8 @@ templates.env.loader = FileSystemLoader(["./templates", "./competitions"])
 @router.get("/data", response_class=HTMLResponse)
 async def data_page(request: Request, compe: str):
     return templates.TemplateResponse(
-        "data.html", {"request": request, "macro_src": "./" + compe + "/macro.html"}
+        "data.html",
+        {"request": request, "macro_src": f"./{compe}/templates/macro.html"},
     )
 
 

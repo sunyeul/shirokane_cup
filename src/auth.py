@@ -1,5 +1,4 @@
 from datetime import timedelta, datetime
-from typing import Annotated
 
 from fastapi import FastAPI, HTTPException, Depends, status, Request
 from fastapi.security import (
@@ -10,7 +9,11 @@ from jose import JWTError, jwt
 from passlib.context import CryptContext
 from pydantic import BaseModel
 
-from database import user_table, user_database
+from sqlalchemy.orm import Session
+from sqlalchemy.exc import NoResultFound
+
+from database import get_db
+from models import User
 
 
 class Token(BaseModel):
@@ -20,15 +23,6 @@ class Token(BaseModel):
 
 class TokenData(BaseModel):
     username: str | None = None
-
-
-class User(BaseModel):
-    user_id: int
-    username: str | None = None
-
-
-class UserInDB(User):
-    hashed_password: str
 
 
 SECRET_KEY = "my_secret_key"
@@ -51,15 +45,19 @@ def get_password_hash(password):
     return pwd_context.hash(password)
 
 
-async def get_user(username: str):
-    query = user_table.select().where(user_table.c.username == username)
-    result = await user_database.fetch_one(query)
-    if result is not None:
-        return UserInDB(**result)
+async def get_user(username: str, db: Session):
+    try:
+        return db.query(User).filter(User.username == username).one()
+    except NoResultFound:
+        return None
 
 
-async def authenticate_user(username: str, password: str):
-    user = await get_user(username)
+async def authenticate_user(
+    username: str,
+    password: str,
+    db: Session = Depends(get_db),
+):
+    user = await get_user(db, username)
     if not user:
         return False
     if not verify_password(password, user.hashed_password):
@@ -79,9 +77,7 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None):
     return encoded_jwt
 
 
-# 액세스 토큰 유효성 검사 함수
-# async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
-async def get_current_user(request: Request):
+async def get_current_user(request: Request, db: Session = Depends(get_db)):
     access_token: str = request.cookies.get("access_token")
     _, token = access_token.split(" ")
 
@@ -99,7 +95,7 @@ async def get_current_user(request: Request):
     except JWTError:
         raise credentials_exception
 
-    user = await get_user(username=token_data.username)
+    user = await get_user(db=db, username=token_data.username)
     if user is None:
         raise credentials_exception
     return user

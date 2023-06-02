@@ -8,6 +8,7 @@ from fastapi.responses import HTMLResponse, RedirectResponse
 from jinja2 import FileSystemLoader
 
 from auth import *
+from database import get_db
 
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")
@@ -21,9 +22,13 @@ def login(request: Request):
 
 @router.post("/token", response_class=HTMLResponse)
 async def login_for_access_token(
-    request: Request, form_data: Annotated[OAuth2PasswordRequestForm, Depends()]
+    request: Request,
+    form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
+    db: Session = Depends(get_db),
 ):
-    user = await authenticate_user(form_data.username, form_data.password)
+    user = await authenticate_user(
+        db=db, username=form_data.username, password=form_data.password
+    )
     if not user:
         msg = "Incorrect username or password"
         return templates.TemplateResponse(

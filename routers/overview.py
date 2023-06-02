@@ -14,5 +14,9 @@ templates.env.loader = FileSystemLoader(["./templates", "./competitions"])
 async def overview_page(request: Request, compe: str):
     return templates.TemplateResponse(
         "overview.html",
-        {"request": request, "macro_src": "./" + compe + "/macro.html"},
+        {
+            "request": request,
+            "macro_src": f"./{compe}/templates/macro.html",
+            "compe": compe,
+        },
     )

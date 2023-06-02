@@ -8,7 +8,17 @@
     <div class="textarea">
         <h2>Data Description</h2>
         <hr>
-        {{ data_info() }}
+        <div id="overviewtext" style="padding-left:40px;">
+            <h3>データの入手方法</h3>
+
+            <br>
+            <form action="data_download" method="get">
+                <button class="send">Download zip</button>
+            </form>
+            </br>
+
+            {{ data_info() }}
+        </div>
     </div>
 </div>
 

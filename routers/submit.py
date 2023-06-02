@@ -1,16 +1,13 @@
-from fastapi import APIRouter, Request, UploadFile, Form
+from fastapi import APIRouter, Request, UploadFile, Form, Depends
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 from jinja2 import FileSystemLoader
 
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-
+from data_check import FileCheckError
 from typing import Annotated
 from compe_db import (
-    update_compe_leaderboard_tbl,
-    insert_compe_submission_tbl,
-    read_compe_leaderboard_tbl,
+    insert_submission,
+    read_leaderboard,
 )
 
 from auth import get_current_user
@@ -19,6 +16,8 @@ import io
 import importlib
 import pandas as pd
 
+from database import get_db
+
 
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")
@@ -26,14 +25,15 @@ templates.env.loader = FileSystemLoader(["./templates", "./competitions"])
 
 
 @router.get("/submit", response_class=HTMLResponse)
-async def submit_page(request: Request, compe: str):
+async def submit_page(request: Request, compe: str, db=Depends(get_db)):
     try:
-        _ = await get_current_user(request)
+        _ = await get_current_user(request, db)
     except:
         return RedirectResponse(url="/login", status_code=302)
 
     return templates.TemplateResponse(
-        "submit.html", {"request": request, "macro_src": "./" + compe + "/macro.html"}
+        "submit.html",
+        {"request": request, "macro_src": f"./{compe}/templates/macro.html"},
     )
 
 
@@ -43,6 +43,7 @@ async def submitresult(
     compe: str,
     upload_file: UploadFile,
     description: Annotated[str, Form()],
+    db=Depends(get_db),
 ):
     # Convert submitted file to data frame
     try:
@@ -53,7 +54,11 @@ async def submitresult(
         msg = "submitted file failed to convert to data frame. Please check."
         return templates.TemplateResponse(
             "submit.html",
-            {"request": request, "macro_src": "./" + compe + "/macro.html", "msg": msg},
+            {
+                "request": request,
+                "macro_src": f"./{compe}/templates/macro.html",
+                "msg": msg,
+            },
         )
 
     # TODO: Save the sumbitted file to the database
@@ -62,39 +67,37 @@ async def submitresult(
     compe_module = importlib.import_module("competitions." + compe)
 
     try:
-        sc = compe_module.ScoreCalculator
-        scores = sc.calc_score(df_submit)
-    except compe_module.FileCheckError as e:
+        sc = compe_module.score_calculator
+        score = sc.calc_score(df_submit)
+    except FileCheckError as e:
         return templates.TemplateResponse(
             "submit.html",
             {
                 "request": request,
-                "macro_src": "./" + compe + "/macro.html",
+                "macro_src": f"./{compe}/templates/macro.html",
                 "msg": e.message,
             },
         )
 
     # add file contents and upload information into database
-    user = await get_current_user(request)
-    insert_compe_submission_tbl(
-        compe=compe,
-        user_id=user.user_id,
-        username=user.username,
+    user = await get_current_user(request, db)
+    insert_submission(
+        competition_id=int(compe),
+        user_id=user.id,
         description=description,
-        score=scores[sc.main_score],
+        score=score,
     )
 
     # update leaderboard
-    update_compe_leaderboard_tbl(compe)
-    leaderboard = read_compe_leaderboard_tbl(compe)
+    leaderboard = read_leaderboard(compe)
 
     return templates.TemplateResponse(
         "leaderboard.html",
         {
             "request": request,
             "tables": leaderboard,
-            "main_score": scores[sc.main_score],
+            "main_score": score,
             "compe": compe,
-            "macro_src": "./" + compe + "/macro.html",
+            "macro_src": f"./{compe}/templates/macro.html",
         },
     )
