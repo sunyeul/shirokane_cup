@@ -1,38 +1,32 @@
+<!-- Filename: submit.html -->
+
 {% extends "layout.html" %}
 {% from macro_src import competition_title, competition_subtitle %}
 
 {% block body %}
 
-
-
-<div class="main">
-    <div class="textarea">
-        <h2>Submit Predictions</h2>
-        <hr>
-        <p>ここで提出したファイルのスコアがリーダーボードに反映されます。</p>
-        {% if msg %}
-        <div class="alert alert-danger" role="alert">
-            {{msg}}
-        </div>
-        {% endif %}
-        <form id="my_form" method="post" action="submitresult" enctype="multipart/form-data" autocomplete="on">
-            <ul>
-                <li class="file">
-                    <input type="file" style="display:inline" name="upload_file" />
-                </li>
-                <li class="description">
-                    <label for="description">提出説明:</label>
-                </li>
-                <li>
-                    <input type="text" name="description" style="width: 1000px; padding: 10px;" maxlength="100"
-                        placeholder="Write what you want :)" />
-                </li>
-                <li>
-                    <button class="send" id="button" type="submit" name="submit">submit!</button>
-                </li>
-            </ul>
-        </form>
-    </div>
+<div class="d-flex justify-content-between align-items-center">
+    <h4 class="display-5">Submit Predictions</h4>
 </div>
+<hr class="my-3">
+
+<p>ここで提出したファイルのスコアがリーダーボードに反映されます。</p>
+{% if msg %}
+<div class="alert alert-danger" role="alert">
+    {{msg}}
+</div>
+{% endif %}
+<form id="my_form" method="post" action="submitresult" enctype="multipart/form-data" autocomplete="on">
+    <div class="form-group">
+        <label for="upload_file">File:</label>
+        <input type="file" class="form-control-file" id="upload_file" name="upload_file">
+    </div>
+    <div class="form-group">
+        <label for="description">提出説明:</label>
+        <textarea class="form-control" id="description" name="description" rows="3"
+            placeholder="Write what you want :)"></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit!</button>
+</form>
 
 {% endblock %}

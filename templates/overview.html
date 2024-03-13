@@ -1,17 +1,18 @@
+<!-- Filename: overview.html -->
+
 {% extends "layout.html" %}
 {% from macro_src import competition_title, competition_subtitle %}
 {% from macro_src import description %}
 
 {% block body %}
 
-<div class="main">
-    <div class="textarea">
-        <h2>Overview</h2>
-        <hr>
-        <div id="overviewtext" style="padding-left:40px;">
-            {{ description() }}
-        </div>
-    </div>
+<div class="d-flex justify-content-between align-items-center">
+    <h4 class="display-5">Overview</h4>
+</div>
+<hr class="my-3">
+
+<div id="overviewtext" class="px-1">
+    {{ description() }}
 </div>
 
 {% endblock %}

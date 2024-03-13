@@ -124,7 +124,7 @@ nav#compe_bar .right {
     margin-bottom: 1em;
 }
 
-#subresult, .textarea {
+.textarea {
     background-color: white;
     padding: 2em;
     margin-bottom: 2em;

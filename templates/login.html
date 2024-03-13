@@ -1,67 +1,52 @@
+<!-- Filename: login.html -->
+
 <!DOCTYPE html>
 <html>
 
 <head>
     <title>Login</title>
+
+    <!-- Favicon -->
+    <link rel="icon" href="{{ url_for('static', path='favicon.ico') }}" type="image/x-icon">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <!-- Custom CSS -->
     <link href="{{ url_for('static', path='/style.css') }}" rel="stylesheet">
-    <style>
-        /* login form style */
-        main {
-            max-width: 400px;
-            margin: 0 auto;
-            padding: 1em;
-        }
-
-        .input-group {
-            display: flex;
-            flex-direction: column;
-            margin-bottom: 1em;
-        }
-
-        .input-group label {
-            margin-bottom: 0.5em;
-        }
-
-        .input-group input {
-            padding: 0.5em;
-            font-size: 1em;
-        }
-
-        .btn-primary {
-            padding: 0.5em 1em;
-            font-size: 1em;
-            color: white;
-            background-color: #457ba0;
-            border: none;
-            cursor: pointer;
-        }
-
-        .btn-primary:hover {
-            background-color: #366782;
-        }
-    </style>
 </head>
 
 <body>
-    <main>
-        <h2>Login</h2>
-        {% if msg %}
-        <div class="alert alert-danger" role="alert">
-            {{msg}}
+    <div class="container">
+        <div class="row justify-content-center align-items-center" style="height:100vh">
+            <div class="col-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class="card-title text-center">Login</h2>
+                        {% if msg %}
+                        <div class="alert alert-danger" role="alert">
+                            {{msg}}
+                        </div>
+                        {% endif %}
+                        <form action="/token" method="post">
+                            <div class="form-group">
+                                <label for="username">Username</label>
+                                <input type="text" id="username" name="username" class="form-control"
+                                    placeholder="Username" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="password">Password</label>
+                                <input type="password" id="password" name="password" class="form-control"
+                                    placeholder="Password" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-block">Login</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
-        {% endif %}
-        <form action="/token" method="post">
-            <div class="input-group">
-                <label for="username">Username</label>
-                <input type="text" id="username" name="username" placeholder="Username" required>
-            </div>
-            <div class="input-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" placeholder="Password" required>
-            </div>
-            <button type="submit" class="btn-primary">Login</button>
-        </form>
-    </main>
+    </div>
 </body>
 
 </html>
