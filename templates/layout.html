@@ -23,43 +23,39 @@
     <link href="{{ url_for('static', path='/style.css') }}" rel="stylesheet">
 
     <style>
+        :root {
+            --main-bg-color: #f8f9fa;
+            --active-color: #007bff;
+            --submit-btn-bg: #28a745;
+            --submit-btn-hover-bg: #218838;
+            --submit-btn-active-bg: #1e7e34;
+        }
+
         body {
             font-family: 'Roboto', sans-serif;
             color: #333;
         }
 
-        .navbar {
-            background-color: #f8f9fa;
+        .navbar, .footer {
+            background-color: var(--main-bg-color);
         }
 
-        .navbar-brand {
-            color: #007bff;
-        }
-
-        .nav-item {
-            color: #333;
-        }
-
-        .nav-item.active {
-            color: #007bff;
+        .navbar-brand, .nav-item.active {
+            color: var(--active-color);
         }
 
         .submit-button {
-            background-color: #28a745;
+            background-color: var(--submit-btn-bg);
             color: white;
         }
 
         .submit-button:hover {
-            background-color: #218838;
+            background-color: var(--submit-btn-hover-bg);
         }
 
         .submit-button:active {
-            background-color: #1e7e34;
+            background-color: var(--submit-btn-active-bg);
             box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
-        }
-
-        .footer {
-            background-color: #f8f9fa;
         }
 
         .footer .text-muted {
@@ -70,7 +66,7 @@
 
 <body>
     <nav class="navbar navbar-light bg-light">
-        <a class="navbar-brand" href="/competitions"><i class="fa fa-trophy" aria-hidden="true"></i> 白金カップ</a>
+        <a class="navbar-brand" href="/overview"><i class="fa fa-trophy" aria-hidden="true"></i> 白金カップ</a>
         {% if 'access_token' in request.cookies %}
         <a class="nav-link" href="/logout"><i class="fa fa-sign-out" aria-hidden="true"></i> Logout</a>
         {% else %}
@@ -80,14 +76,13 @@
 
     <main class="container-fluid mb-5" style="max-width: 1500px;">
         <header class="jumbotron">
-            <h1 class="display-6">{{ competition_title }}</h1>
+            <h1 class="display-4">{{ competition_title }}</h1>
             <p class="lead">{{ competition_subtitle }}</p>
 
             <div class="nav nav-tabs" id="nav-tab">
                 <a class="nav-item nav-link" id="overview-tab" href="overview">Overview</a>
                 <a class="nav-item nav-link" id="data-tab" href="data">Data</a>
                 <a class="nav-item nav-link" id="leaderboard-tab" href="leaderboard">Leaderboard</a>
-                <a class="nav-item nav-link" id="discussion-tab" href="discussion">Discussion</a>
                 <a class="nav-item nav-link ml-auto" id="mysubmissions-tab" href="mysubmissions">My Submissions</a>
                 <a class="nav-item nav-link submit-button" id="submit-tab" href="submit"><i class="fa fa-paper-plane"
                         aria-hidden="true"></i> Submit Predictions</a>

@@ -5,15 +5,15 @@ from jinja2 import FileSystemLoader
 
 from data_check import FileCheckError
 from typing import Annotated
-from compe_db import (
+from crud import (
     insert_submission,
     read_leaderboard,
 )
+from score import ScoreCalculator
 
 from auth import get_current_user
 
 import io
-import importlib
 import pandas as pd
 
 from database import get_db
@@ -21,11 +21,11 @@ from database import get_db
 
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")
-templates.env.loader = FileSystemLoader(["./templates", "./competitions"])
+templates.env.loader = FileSystemLoader(["./templates", "./competition_data"])
 
 
 @router.get("/submit", response_class=HTMLResponse)
-async def submit_page(request: Request, compe: str, db=Depends(get_db)):
+async def submit_page(request: Request, db=Depends(get_db)):
     try:
         _ = await get_current_user(request, db)
     except:
@@ -33,14 +33,16 @@ async def submit_page(request: Request, compe: str, db=Depends(get_db)):
 
     return templates.TemplateResponse(
         "submit.html",
-        {"request": request, "macro_src": f"./{compe}/templates/macro.html"},
+        {
+            "request": request,
+            "macro_src": "macro.html"
+        },
     )
 
 
 @router.post("/submitresult")
 async def submitresult(
     request: Request,
-    compe: str,
     upload_file: UploadFile,
     description: Annotated[str, Form()],
     db=Depends(get_db),
@@ -56,25 +58,24 @@ async def submitresult(
             "submit.html",
             {
                 "request": request,
-                "macro_src": f"./{compe}/templates/macro.html",
+                "macro_src": "macro.html",
                 "msg": msg,
             },
         )
 
     # TODO: Save the sumbitted file to the database
-
-    # calculate score
-    compe_module = importlib.import_module("competitions." + compe)
+    # TODO: Validate submitted file
+    # TODO: Calculate score
 
     try:
-        sc = compe_module.score_calculator
+        sc = ScoreCalculator()
         score = sc.calc_score(df_submit)
     except FileCheckError as e:
         return templates.TemplateResponse(
             "submit.html",
             {
                 "request": request,
-                "macro_src": f"./{compe}/templates/macro.html",
+                "macro_src": "macro.html",
                 "msg": e.message,
             },
         )
@@ -82,14 +83,13 @@ async def submitresult(
     # add file contents and upload information into database
     user = await get_current_user(request, db)
     insert_submission(
-        competition_name=compe,
         user_id=user.id,
         description=description,
         score=score,
     )
 
     # update leaderboard
-    leaderboard = read_leaderboard(compe)
+    leaderboard = read_leaderboard()
 
     return templates.TemplateResponse(
         "leaderboard.html",
@@ -97,7 +97,6 @@ async def submitresult(
             "request": request,
             "tables": leaderboard,
             "main_score": score,
-            "compe": compe,
-            "macro_src": f"./{compe}/templates/macro.html",
+            "macro_src": "macro.html",
         },
     )

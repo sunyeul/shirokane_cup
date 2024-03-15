@@ -6,7 +6,6 @@ from jinja2 import FileSystemLoader
 
 from routers import (
     login_router,
-    competitions_router,
     overview_router,
     data_router,
     leaderboard_router,
@@ -27,12 +26,11 @@ async def top_page(request: Request):
 
 
 app.include_router(login_router)
-app.include_router(competitions_router)
-app.include_router(overview_router, prefix="/competitions/{compe}")
-app.include_router(data_router, prefix="/competitions/{compe}")
-app.include_router(leaderboard_router, prefix="/competitions/{compe}")
-app.include_router(mysub_router, prefix="/competitions/{compe}")
-app.include_router(submit_router, prefix="/competitions/{compe}")
+app.include_router(overview_router)
+app.include_router(data_router)
+app.include_router(leaderboard_router)
+app.include_router(mysub_router)
+app.include_router(submit_router)
 
 if __name__ == "__main__":
     import uvicorn

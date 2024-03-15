@@ -7,20 +7,23 @@ from starlette.responses import FileResponse
 
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")
-templates.env.loader = FileSystemLoader(["./templates", "./competitions"])
+templates.env.loader = FileSystemLoader(["./templates", "./data"])
 
 
 @router.get("/data", response_class=HTMLResponse)
-async def data_page(request: Request, compe: str):
+async def data_page(request: Request):
     return templates.TemplateResponse(
         "data.html",
-        {"request": request, "macro_src": f"./{compe}/templates/macro.html"},
+        {
+            "request": request,
+            "macro_src": "macro.html"
+        },
     )
 
 
 @router.get("/data_download")
-async def data_download(compe: str):
-    file_path = f"../competitions/{compe}/data/data.zip"
+async def data_download():
+    file_path = f"./competition_data/data.zip"
 
     return FileResponse(
         path=file_path,

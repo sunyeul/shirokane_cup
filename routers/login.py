@@ -1,18 +1,15 @@
 from datetime import timedelta
-from typing import Annotated
 
 from fastapi import APIRouter, Request, Depends, status
 from fastapi.security import OAuth2PasswordRequestForm
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse, RedirectResponse
-from jinja2 import FileSystemLoader
 
 from auth import *
 from database import get_db
 
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")
-templates.env.loader = FileSystemLoader(["./templates", "./competitions"])
 
 
 @router.get("/login", response_class=HTMLResponse)
@@ -23,7 +20,7 @@ def login(request: Request):
 @router.post("/token", response_class=HTMLResponse)
 async def login_for_access_token(
     request: Request,
-    form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
+    form_data: OAuth2PasswordRequestForm = Depends(),
     db: Session = Depends(get_db),
 ):
     user = await authenticate_user(
@@ -42,17 +39,16 @@ async def login_for_access_token(
     )
 
     # Set the token as a cookie in the response
-    response = RedirectResponse(url="/competitions", status_code=status.HTTP_302_FOUND)
+    response = RedirectResponse(url="/overview", status_code=status.HTTP_302_FOUND)
     response.set_cookie(
         key="access_token",
         value=f"Bearer {access_token}",
         httponly=True,
         secure=True,
-        # max_age=1800,
-        # expires=1800,
+        max_age=1800,
+        expires=1800,
     )
 
-    # return {"access_token": access_token, "token_type": "bearer"}
     return response
 
 
