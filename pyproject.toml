@@ -1,0 +1,36 @@
+[tool.poetry]
+name = "shirokane-cup"
+version = "0.1.0"
+description = ""
+authors = ["sunyeul <res1235@gmail.com>"]
+readme = "README.md"
+packages = [
+    {include = "*.py", from="src"},
+]
+
+[tool.poetry.dependencies]
+python = ">=3.11,<4"
+numpy = "^1.24.3"
+pandas = "^2.0.1"
+sqlalchemy = ">=1.4.42"
+fastapi = "^0.95.2"
+uvicorn = {extras = ["standard"], version = "^0.22.0"}
+jinja2 = "^3.1.2"
+pydantic = "^1.10.8"
+python-multipart = "^0.0.6"
+passlib = "^1.7.4"
+bcrypt = "4.0.1"
+python-jose = "^3.3.0"
+itsdangerous = "^2.1.2"
+scikit-learn = "^1.2.2"
+aiofiles = "^23.2.1"
+nbconvert = "^7.16.2"
+markdown2 = "^2.4.13"
+
+
+[tool.poetry.group.dev.dependencies]
+ipykernel = "^6.23.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
