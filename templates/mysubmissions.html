@@ -11,19 +11,23 @@
 <hr class="my-3">
 
 <table class="table table-striped">
-    <tr>
-        {% for ind in tables.columns %}
-        <th align="left">{{ind}}</th>
+    <thead>
+        <tr>
+            {% for ind in tables.columns %}
+            <th align="left">{{ind}}</th>
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for score in tables.iterrows() %}
+        <tr>
+            <td>{{score[1]["Description"]}}</td>
+            <td>{{score[1]["Score"]}}</td>
+            <td>{{score[1]["Upload Date"]}}</td>
+            <td>{{score[1]["Last Submission"]}}</td>
+        </tr>
         {% endfor %}
-    </tr>
-    {% for score in tables.iterrows() %}
-    <tr>
-        <td>{{score[1]["Description"]}}</td>
-        <td>{{score[1]["Score"]}}</td>
-        <td>{{score[1]["Upload Date"]}}</td>
-        <td>{{score[1]["Last Submission"]}}</td>
-    </tr>
-    {% endfor %}
+    </tbody>
 </table>
 
 {% endblock %}

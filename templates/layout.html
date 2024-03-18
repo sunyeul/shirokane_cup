@@ -14,15 +14,16 @@
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
 
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
-    <!-- Custom CSS -->
-    <link href="{{ url_for('static', path='/style.css') }}" rel="stylesheet">
-
     <style>
+        html {
+            scrollbar-gutter: stable;
+        }
+
         :root {
             --main-bg-color: #f8f9fa;
             --active-color: #007bff;
@@ -36,11 +37,21 @@
             color: #333;
         }
 
-        .navbar, .footer {
+        .jumbotron .display-4,
+        .jumbotron .lead,
+        .jumbotron .nav,
+        .jumbotron .nav-tabs {
+            max-width: 1500px;
+            margin: auto;
+        }
+
+        .navbar,
+        .footer {
             background-color: var(--main-bg-color);
         }
 
-        .navbar-brand, .nav-item.active {
+        .navbar-brand,
+        .nav-item.active {
             color: var(--active-color);
         }
 
@@ -74,20 +85,20 @@
         {% endif %}
     </nav>
 
+    <header class="jumbotron">
+        <h1 class="display-4">{{ competition_title }}</h1>
+        <p class="lead">{{ competition_subtitle }}</p>
+        <div class="nav nav-tabs" id="nav-tab">
+            <a class="nav-item nav-link" id="overview-tab" href="/overview">Overview</a>
+            <a class="nav-item nav-link" id="data-tab" href="/data">Data</a>
+            <a class="nav-item nav-link" id="discussion-tab" href="/discussion">discussion</a>
+            <a class="nav-item nav-link" id="leaderboard-tab" href="/leaderboard">Leaderboard</a>
+            <a class="nav-item nav-link ml-auto" id="mysubmissions-tab" href="/mysubmissions">My Submissions</a>
+            <a class="nav-item nav-link submit-button" id="submit-tab" href="/submit"><i class="fa fa-paper-plane"
+                    aria-hidden="true"></i> Submit Predictions</a>
+        </div>
+    </header>
     <main class="container-fluid mb-5" style="max-width: 1500px;">
-        <header class="jumbotron">
-            <h1 class="display-4">{{ competition_title }}</h1>
-            <p class="lead">{{ competition_subtitle }}</p>
-
-            <div class="nav nav-tabs" id="nav-tab">
-                <a class="nav-item nav-link" id="overview-tab" href="overview">Overview</a>
-                <a class="nav-item nav-link" id="data-tab" href="data">Data</a>
-                <a class="nav-item nav-link" id="leaderboard-tab" href="leaderboard">Leaderboard</a>
-                <a class="nav-item nav-link ml-auto" id="mysubmissions-tab" href="mysubmissions">My Submissions</a>
-                <a class="nav-item nav-link submit-button" id="submit-tab" href="submit"><i class="fa fa-paper-plane"
-                        aria-hidden="true"></i> Submit Predictions</a>
-            </div>
-        </header>
         {% block body %}{% endblock %}
     </main>
 

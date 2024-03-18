@@ -16,17 +16,34 @@
     {{msg}}
 </div>
 {% endif %}
-<form id="my_form" method="post" action="submitresult" enctype="multipart/form-data" autocomplete="on">
+<form id="my_form" method="post" action="/submitresult" enctype="multipart/form-data" autocomplete="on">
     <div class="form-group">
         <label for="upload_file">File:</label>
         <input type="file" class="form-control-file" id="upload_file" name="upload_file">
     </div>
     <div class="form-group">
         <label for="description">提出説明:</label>
-        <textarea class="form-control" id="description" name="description" rows="3"
-            placeholder="Write what you want :)"></textarea>
+        <textarea class="form-control" name="description" rows="3" placeholder="Write what you want :)"></textarea>
     </div>
     <button type="submit" class="btn btn-primary">Submit!</button>
 </form>
+<script>
+    // Select the textarea you want to apply the dynamic height adjustment
+    const textarea = document.querySelector('.form-control');
+
+    // Function to adjust the height
+    const adjustHeight = () => {
+        // Reset the height to 'auto' to get the correct scrollHeight
+        textarea.style.height = 'auto';
+        // Set the height to the scrollHeight plus a little extra space
+        textarea.style.height = `${textarea.scrollHeight}px`;
+    };
+
+    // Listen for input event on the textarea
+    textarea.addEventListener('input', adjustHeight);
+
+    // Initial adjustment in case there's pre-filled content
+    adjustHeight();
+</script>
 
 {% endblock %}
