@@ -33,10 +33,7 @@ async def submit_page(request: Request, db=Depends(get_db)):
 
     return templates.TemplateResponse(
         "submit.html",
-        {
-            "request": request,
-            "macro_src": "macro.html"
-        },
+        {"request": request, "macro_src": "macro.html"},
     )
 
 
@@ -58,7 +55,6 @@ async def submitresult(
             "submit.html",
             {
                 "request": request,
-                "macro_src": "macro.html",
                 "msg": msg,
             },
         )

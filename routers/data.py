@@ -14,10 +14,7 @@ templates.env.loader = FileSystemLoader(["./templates", "./data"])
 async def data_page(request: Request):
     return templates.TemplateResponse(
         "data.html",
-        {
-            "request": request,
-            "macro_src": "macro.html"
-        },
+        {"request": request, "macro_src": "macro.html"},
     )
 
 
