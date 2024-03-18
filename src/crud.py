@@ -1,6 +1,5 @@
 from database import engine, get_db
-from models import SubmitStore
-from datetime import datetime
+from models import SubmitStore, Post, Comment
 from utils import format_time_ago
 
 import pandas as pd
@@ -20,7 +19,6 @@ def insert_submission(
         user_id=user_id,
         description=description,
         score=score,
-        upload_date=datetime.now(),
     )
 
     db.add(c2)
@@ -77,3 +75,35 @@ def read_my_submissions(username: str) -> pd.DataFrame:
     )
 
     return my_submissions
+
+
+# データベース周りの関数たち
+def insert_discussion(
+    user_id: int = None,
+    title: str = None,
+    content: str = None,
+):
+    # Use get_db to obtain a session
+    db = next(get_db())
+
+    # Create a new SubmitStore object
+    c2 = Post(user_id=user_id, title=title, content=content)
+
+    db.add(c2)
+    db.commit()
+
+
+# データベース周りの関数たち
+def insert_comment(
+    content: str = None,
+    user_id: int = None,
+    post_id: int = None,
+):
+    # Use get_db to obtain a session
+    db = next(get_db())
+
+    # Create a new SubmitStore object
+    c2 = Comment(content=content, user_id=user_id, post_id=post_id)
+
+    db.add(c2)
+    db.commit()

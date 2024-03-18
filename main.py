@@ -8,6 +8,7 @@ from routers import (
     login_router,
     overview_router,
     data_router,
+    discussion_router,
     leaderboard_router,
     mysub_router,
     submit_router,
@@ -17,7 +18,7 @@ app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 templates = Jinja2Templates(directory="./templates")
-templates.env.loader = FileSystemLoader(["./templates", "./competitions"])
+templates.env.loader = FileSystemLoader(["./templates"])
 
 
 @app.get("/", response_class=HTMLResponse)
@@ -28,6 +29,7 @@ async def top_page(request: Request):
 app.include_router(login_router)
 app.include_router(overview_router)
 app.include_router(data_router)
+app.include_router(discussion_router)
 app.include_router(leaderboard_router)
 app.include_router(mysub_router)
 app.include_router(submit_router)

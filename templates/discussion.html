@@ -1,0 +1,40 @@
+<!-- Filename: discussion.html -->
+
+{% extends "layout.html" %}
+{% from macro_src import competition_title, competition_subtitle %}
+
+{% block body %}
+
+<div class="d-flex justify-content-between align-items-center">
+    <h4 class="display-5">Discussions</h4>
+    <a href="discussion/new" class="btn btn-dark" role="button">New Topic</a>
+</div>
+<hr class="my-3">
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col" style="width: 10px;">No</th>
+            <th scope="col" style="width: 10px;">Upvote</th>
+            <th scope="col" style="width: 350px;">Title</th>
+            <th scope="col" style="width: 100px;">User name</th>
+            <th scope="col" style="width: 120px;">Created time</th>
+            <th scope="col" style="width: 10px;">#Comments</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for post in posts %}
+        <tr>
+            <td>{{ post[0].id }}</td>
+            <td>{{ post[0].upvote }}</td>
+            <td>
+                <a href="/discussion/{{ post[0].id }}">{{ post[0].title }}</a>
+            </td>
+            <td>{{ post[1] }}</td>
+            <td>{{ post[0].created_at }}</td>
+            <td>{{ post[2] }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

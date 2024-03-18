@@ -1,0 +1,143 @@
+{% extends "layout.html" %}
+{% from macro_src import competition_title, competition_subtitle %}
+
+{% block head %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discussion Post</title>
+</head>
+{% endblock %}
+
+{% block body %}
+
+<body>
+    <style>
+        .comment-box {
+            background-color: #fff;
+            /* White background */
+            border: 1px solid #ddd;
+            /* Light grey border */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            /* Subtle shadow for depth */
+            padding: 16px;
+            /* Spacing inside the box */
+            margin-bottom: 8px;
+            /* Spacing between comment boxes */
+            border-radius: 8px;
+            /* Rounded corners */
+        }
+
+        .user-name {
+            font-weight: 700;
+            /* More emphasis on user names */
+            color: #0056b3;
+            /* Adjusted to a more engaging color */
+            margin-bottom: 4px;
+            /* Added space for separation */
+        }
+
+        .posting-time {
+            font-size: 0.85rem;
+            color: #6c757d;
+            /* Softened color for less emphasis */
+        }
+
+        .comment-content {
+            color: #212529;
+            /* Improved contrast for readability */
+            margin-bottom: 16px;
+        }
+
+        .form-control {
+            width: 100%;
+            /* Full width */
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ced4da;
+            margin-bottom: 12px;
+            /* Space before the submit button */
+            box-sizing: border-box;
+            /* Includes padding and border in the element's total width and height */
+        }
+
+        button {
+            background-color: #007bff;
+            /* Bootstrap primary blue */
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            /* Smooth background color transition */
+        }
+
+        button:hover {
+            background-color: #0056b3;
+            /* Darker blue on hover for feedback */
+        }
+
+        .comment-divider {
+            background-color: #dee2e6;
+            /* Slightly darker for better visibility */
+            margin-top: 10px;
+            margin-bottom: 10px;
+            /* Increased spacing */
+        }
+    </style>
+    <div class="container">
+        <article class="post-article">
+            <h1>{{ post.title }}</h1>
+            <div class="user-name">{{ post.user.display_name }}</div>
+            <div class="posting-time">Posted at {{ post.created_at }}</div>
+            <p>{{ post.content | safe }}</p>
+            <hr class="comment-divider" />
+        </article>
+
+        <section class="add-comment-section">
+            <form method="post" action="/discussion/{{ post.id }}/add-comment" enctype="multipart/form-data"
+                autocomplete="on">
+                <textarea class="form-control" name="content" rows="3" placeholder="Add a new comment"
+                    required></textarea>
+                <input type="hidden" name="user_id" value="{{ post.user_id }}">
+                <button type="submit">Post Comment</button>
+            </form>
+            <hr class="comment-divider" />
+        </section>
+
+        <section class="comments-section">
+            {% for comment in post.comments %}
+            <div class="comment-box">
+                <div class="user-name">{{ comment.user.display_name }}</div>
+                <div class="posting-time">Posted at {{ comment.created_at }}</div>
+                <div class="comment-content">
+                    <p>{{ comment.content }}</p>
+                </div>
+            </div>
+            <hr class="comment-divider" />
+            {% endfor %}
+        </section>
+    </div>
+
+    <script>
+        // Select the textarea you want to apply the dynamic height adjustment
+        const textarea = document.querySelector('.form-control');
+
+        // Function to adjust the height
+        const adjustHeight = () => {
+            // Reset the height to 'auto' to get the correct scrollHeight
+            textarea.style.height = 'auto';
+            // Set the height to the scrollHeight plus a little extra space
+            textarea.style.height = `${textarea.scrollHeight}px`;
+        };
+
+        // Listen for input event on the textarea
+        textarea.addEventListener('input', adjustHeight);
+
+        // Initial adjustment in case there's pre-filled content
+        adjustHeight();
+    </script>
+</body>
+{% endblock %}

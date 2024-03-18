@@ -1,8 +1,8 @@
-
 from database import engine, Session
-from models import Base, User
+from models import Base, User, SubmitStore, Post, Comment
 
 import pandas as pd
+
 
 # load users data from CSV
 def import_users_from_csv(file_path):
@@ -18,13 +18,17 @@ def import_users_from_csv(file_path):
     # commit the transaction
     session.commit()
 
+
 if __name__ == "__main__":
     # Back-UP submissions table to csv
-    df = pd.read_sql("SELECT * FROM submissions", engine)
-    df.to_csv('backup/data/submissions.csv', index=False)
-    
-    # DROP TABLE IF EXISTS users;
+    # df = pd.read_sql("SELECT * FROM submissions", engine)
+    # df.to_csv("backup/data/submissions.csv", index=False)
+
+    # DROP TABLE IF EXISTS;
     User.__table__.drop(engine, checkfirst=True)
+    SubmitStore.__table__.drop(engine, checkfirst=True)
+    Post.__table__.drop(engine, checkfirst=True)
+    Comment.__table__.drop(engine, checkfirst=True)
 
     # Create all tables in the engine
     Base.metadata.create_all(engine)
@@ -32,4 +36,4 @@ if __name__ == "__main__":
     # create a new session
     session = Session()
 
-    import_users_from_csv('data/user_data/users.csv')
+    import_users_from_csv("data/user_data/users.csv")

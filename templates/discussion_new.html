@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+{% from macro_src import competition_title, competition_subtitle %}
+
+{% block body %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Discussion</title>
+</head>
+
+<body>
+    <div class="container">
+        <h5 class="my-3 border-bottom pb-2">New Topic</h5>
+        <form method="post" action="/new_discussion" enctype="multipart/form-data" autocomplete="on" class="my-3">
+            <div class="mb-3">
+                <input type="text" placeholder="Title" class="form-control" name="title" required>
+            </div>
+            <div class="mb-3">
+                <textarea class="form-control" placeholder="Content" rows="10" name="content" required></textarea>
+            </div>
+            <input type="hidden" name="user_id" value="{{ user.id }}">
+            <button class="btn btn-primary">Publish Topic</button>
+        </form>
+    </div>
+</body>
+{% endblock %}
